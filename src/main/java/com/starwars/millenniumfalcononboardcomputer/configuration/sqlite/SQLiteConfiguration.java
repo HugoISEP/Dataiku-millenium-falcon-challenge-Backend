@@ -9,6 +9,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 import javax.sql.DataSource;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 @Configuration
 @RequiredArgsConstructor
@@ -27,9 +29,19 @@ public class SQLiteConfiguration {
     public DataSource dataSource() {
         val dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName(driverClassName);
-        dataSource.setUrl(String.format("jdbc:sqlite:%s/%s", PATH_TO_RESOURCES_FOLDER, millenniumFalconConfiguration.getRoutesDb()));
         dataSource.setUsername(user);
         dataSource.setPassword(password);
+
+        val absolutePath = millenniumFalconConfiguration.getRoutesDb();
+        val relativePath = String.format("%s/%s", PATH_TO_RESOURCES_FOLDER, millenniumFalconConfiguration.getRoutesDb());
+        if (Files.exists(Path.of(absolutePath))) {
+            dataSource.setUrl(String.format("jdbc:sqlite:%s", absolutePath));
+        } else if (Files.exists(Path.of(relativePath))) {
+            dataSource.setUrl(String.format("jdbc:sqlite:%s", relativePath));
+        } else {
+            throw new ExceptionInInitializerError("File for db routes not found");
+        }
+
         return dataSource;
     }
 }
