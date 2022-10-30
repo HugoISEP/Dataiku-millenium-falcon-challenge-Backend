@@ -1,4 +1,4 @@
-package com.starwars.millenniumfalcononboardcomputer.model;
+package com.starwars.millenniumfalcononboardcomputer.model.entity;
 
 import lombok.Data;
 

@@ -16,7 +16,7 @@ class MillenniumFalconConfigurationTest {
         // Given a file located in classpath:millennium-falcon.json with all the configuration properties
         // When the application context is loaded
         // Then we should get the all the properties defined in that file
-        assertEquals(5, millenniumFalconConfiguration.getAutonomy());
+        assertEquals(6, millenniumFalconConfiguration.getAutonomy());
         assertEquals("Tatooine", millenniumFalconConfiguration.getDeparture());
         assertEquals("Endor", millenniumFalconConfiguration.getArrival());
         assertEquals("universe.db", millenniumFalconConfiguration.getRoutesDb());

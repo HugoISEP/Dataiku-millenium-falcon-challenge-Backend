@@ -1,6 +1,7 @@
-package com.starwars.millenniumfalcononboardcomputer.model;
+package com.starwars.millenniumfalcononboardcomputer.model.entity;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
@@ -8,6 +9,7 @@ import javax.validation.constraints.Min;
 @Entity
 @Table(name = "ROUTES")
 @Data
+@Accessors(chain = true)
 @IdClass(RouteId.class)
 public class Route {
     @Id

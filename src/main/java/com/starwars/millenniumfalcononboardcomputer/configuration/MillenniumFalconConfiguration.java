@@ -2,6 +2,7 @@ package com.starwars.millenniumfalcononboardcomputer.configuration;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import lombok.Data;
+import lombok.experimental.Accessors;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
@@ -16,6 +17,7 @@ import javax.validation.constraints.NotBlank;
         factory = JsonPropertySourceFactory.class)
 @Data
 @ConfigurationProperties
+@Accessors(chain = true)
 @Validated
 public class MillenniumFalconConfiguration {
     @Min(1)
