@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    url: jdbc:sqlite:src/main/resources/universe.db
+    driver-class-name: org.sqlite.JDBC
+    username: admin
+    password: admin
+  jpa:
+    database-platform: com.starwars.millenniumfalcononboardcomputer.configuration.sqlite.SQLiteDialect
+    hibernate.ddl-auto: update
