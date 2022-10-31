@@ -18,18 +18,11 @@ jobs:
           distribution: 'adopt'
           cache: maven
       - run: mvn --batch-mode --update-snapshots package
-      - name: Login to Github Packages
-        uses: docker/login-action@v2
+      - run: mkdir millennium-falcon-package && cp target/*.jar millennium-falcon-package && cp target/classes/millennium-falcon.json  millennium-falcon-package && cp target/classes/universe.db  millennium-falcon-package
+      - uses: actions/upload-artifact@v3
         with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Build image and push to Docker Hub and GitHub Container Registry
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          tags: ghcr.io/hugoisep/dataiku-millenium-falcon-challenge-backend:latest
-          push: true
+          name: Package
+          path: millennium-falcon-package
       - name: Configure SSH
         run: |
           mkdir -p ~/.ssh/
@@ -46,7 +39,7 @@ jobs:
           SSH_USER: ${{ secrets.USER }}
           SSH_KEY: ${{ secrets.PRIVATE_KEY }}
           SSH_HOST: ${{ secrets.HOST }}
-      - name: Login to Github registry
-        run: ssh raspberry 'echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u hugoISEP --password-stdin'
-      - name: Check if successful
-        run: ssh raspberry 'docker run -p 8080:8080 --network global-network --name millennium-falcon-backend ghcr.io/hugoisep/dataiku-millenium-falcon-challenge-backend:latest'
+      - name: Transfer package
+        run: scp -r ./millennium-falcon-package raspberry:~/dataiku/backend/millennium-falcon-package
+      - name: Relaunch Docker containers
+        run: ssh raspberry 'docker-compose -f ~/dataiku/docker-compose.yml up --build -d'
