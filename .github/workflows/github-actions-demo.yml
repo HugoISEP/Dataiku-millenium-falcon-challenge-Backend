@@ -1,9 +1,10 @@
 name: Java CI
 
 on: [push]
-env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
+#on:
+#  push:
+#    branches:
+#      - main
 
 jobs:
   build:
@@ -29,3 +30,23 @@ jobs:
           context: .
           tags: ghcr.io/hugoisep/dataiku-millenium-falcon-challenge-backend:latest
           push: true
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$SSH_KEY" > ~/.ssh/raspberry.key
+          chmod 600 ~/.ssh/raspberry.key
+          cat >>~/.ssh/config <<END
+          Host raspberry
+            HostName $SSH_HOST
+            User $SSH_USER
+            IdentityFile ~/.ssh/raspberry.key
+            StrictHostKeyChecking no
+          END
+        env:
+          SSH_USER: ${{ secrets.USER }}
+          SSH_KEY: ${{ secrets.PRIVATE_KEY }}
+          SSH_HOST: ${{ secrets.HOST }}
+      - name: Login to Github registry
+        run: ssh raspberry 'echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u hugoISEP --password-stdin'
+      - name: Check if successful
+        run: ssh raspberry 'docker run -p 8080:8080 --network global-network --name millennium-falcon-backend ghcr.io/hugoisep/dataiku-millenium-falcon-challenge-backend:latest'
