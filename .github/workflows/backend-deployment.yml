@@ -1,4 +1,4 @@
-name: Java CI
+name: Spring boot CI
 
 on: [push]
 #on:
@@ -11,19 +11,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-java@v3
+      - name: Copy the repository
+        uses: actions/checkout@v3
+      - name: Set up JDK 19
+        uses: actions/setup-java@v3
         with:
           java-version: '19'
           distribution: 'adopt'
           cache: maven
-      - run: mvn --batch-mode --update-snapshots package
-      - run: mkdir millennium-falcon-package && cp target/*.jar millennium-falcon-package && cp target/classes/millennium-falcon.json  millennium-falcon-package && cp target/classes/universe.db  millennium-falcon-package
-      - uses: actions/upload-artifact@v3
-        with:
-          name: Package
-          path: millennium-falcon-package
-      - name: Configure SSH
+      - name: Build and test with Maven
+        run: mvn --batch-mode --update-snapshots package
+      - name: Configure SSH communication
         run: |
           mkdir -p ~/.ssh/
           echo "$SSH_KEY" > ~/.ssh/raspberry.key
@@ -39,7 +37,9 @@ jobs:
           SSH_USER: ${{ secrets.USER }}
           SSH_KEY: ${{ secrets.PRIVATE_KEY }}
           SSH_HOST: ${{ secrets.HOST }}
-      - name: Transfer package
-        run: scp -r ./millennium-falcon-package raspberry:~/dataiku/backend/millennium-falcon-package
+      - name: Upload artifact
+        run: scp target/*.jar target/classes/universe.db target/classes/millennium-falcon.json raspberry:~/dataiku/backend
       - name: Relaunch Docker containers
         run: ssh raspberry 'docker-compose -f ~/dataiku/docker-compose.yml up --build -d'
+      - name: Clean up
+        run: rm -rf ~/.ssh/
