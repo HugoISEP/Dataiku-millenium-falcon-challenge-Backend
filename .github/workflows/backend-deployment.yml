@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  build:
+  build-test-deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -33,11 +33,13 @@ jobs:
             StrictHostKeyChecking no
           END
         env:
-          SSH_USER: ${{ secrets.USER }}
-          SSH_KEY: ${{ secrets.PRIVATE_KEY }}
-          SSH_HOST: ${{ secrets.HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_KEY: ${{ secrets.SSH_KEY }}
+          SSH_HOST: ${{ secrets.SSH_HOST }}
       - name: Upload artifact
-        run: scp target/*.jar target/classes/universe.db target/classes/millennium-falcon.json raspberry:~/dataiku/backend
+        run: |
+          scp target/classes/universe.db target/classes/millennium-falcon.json raspberry:~/dataiku/backend
+          scp target/*.jar raspberry:~/dataiku/backend/app.jar
       - name: Relaunch Docker containers
         run: ssh raspberry 'docker-compose -f ~/dataiku/docker-compose.yml up --build -d'
       - name: Clean up
