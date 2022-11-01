@@ -42,4 +42,5 @@ jobs:
       - name: Relaunch Docker containers
         run: ssh raspberry 'docker-compose -f ~/dataiku/docker-compose.yml up --build -d'
       - name: Clean up
+        if: always()
         run: rm -rf ~/.ssh/

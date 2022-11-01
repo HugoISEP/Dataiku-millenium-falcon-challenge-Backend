@@ -56,7 +56,7 @@ class RouteServiceTest {
         val result = routeService.getAccessibleRoutesMap();
 
         // Then we should get the for each planet, a list of planet accessible
-        assertTrue(result.get("Tatooine").contains(new AccessibleRoute("Dagobah", 6)));
+        assertTrue(result.get("Tatooine").contains(new AccessibleRoute("Dagobah", 5)));
         assertTrue(result.get("Dagobah").containsAll(Set.of(new AccessibleRoute("Tatooine", 6), new AccessibleRoute("Endor", 4))));
         assertTrue(result.get("Endor").containsAll(Set.of(new AccessibleRoute("Dagobah", 4), new AccessibleRoute("Hoth", 1))));
         assertTrue(result.get("Hoth").contains(new AccessibleRoute("Endor", 1)));
