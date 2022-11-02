@@ -18,7 +18,7 @@ jobs:
           distribution: 'adopt'
           cache: maven
       - name: Build and test with Maven
-        run: mvn --batch-mode --update-snapshots package
+        run: mvn --batch-mode --update-snapshots package -Dspring-boot.run.profiles=prod
       - name: Configure SSH communication
         run: |
           mkdir -p ~/.ssh/

@@ -19,18 +19,12 @@ public class SQLiteConfiguration {
 
     @Value("${spring.datasource.driver-class-name}")
     private String driverClassName;
-    @Value("${spring.datasource.username}")
-    private String user;
-    @Value("${spring.datasource.password}")
-    private String password;
     private final String PATH_TO_RESOURCES_FOLDER = "src/main/resources";
 
     @Bean
     public DataSource dataSource() {
         val dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName(driverClassName);
-        dataSource.setUsername(user);
-        dataSource.setPassword(password);
 
         val absolutePath = millenniumFalconConfiguration.getRoutesDb();
         val relativePath = String.format("%s/%s", PATH_TO_RESOURCES_FOLDER, millenniumFalconConfiguration.getRoutesDb());

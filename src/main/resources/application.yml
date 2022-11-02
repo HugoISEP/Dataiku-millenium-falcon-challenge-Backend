@@ -1,8 +1,16 @@
 spring:
   datasource:
     driver-class-name: org.sqlite.JDBC
-    username: admin
-    password: admin
   jpa:
     database-platform: com.starwars.millenniumfalcononboardcomputer.configuration.sqlite.SQLiteDialect
     hibernate.ddl-auto: update
+  cors:
+    allowed-origins: "*"
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+  cors:
+    allowed-origins: https://millennium-falcon.raspberry78.me

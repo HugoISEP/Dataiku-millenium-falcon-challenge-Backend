@@ -23,8 +23,6 @@ class SQLiteConfigurationTest {
         // Given a db file with a path either absolute or relative to the location of the millennium-falcon.json
         // When the application context is loaded
         // Then the database should be configured
-        assertEquals("admin", driverManagerDataSource.getUsername());
-        assertEquals("admin", driverManagerDataSource.getPassword());
         assertEquals("jdbc:sqlite:src/main/resources/universe.db", driverManagerDataSource.getUrl());
     }
 
