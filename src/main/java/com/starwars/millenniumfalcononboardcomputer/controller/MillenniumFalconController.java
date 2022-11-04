@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequiredArgsConstructor
 public class MillenniumFalconController {
@@ -17,7 +19,7 @@ public class MillenniumFalconController {
      * @return Http status code 200 with probability of the Millennium Falcon to reach the destination
      */
     @PostMapping
-    public ResponseEntity<Float> computeOdds(@RequestBody EmpireInformationDto empireInformationDto) {
+    public ResponseEntity<Float> computeOdds(@Valid @RequestBody EmpireInformationDto empireInformationDto) {
         return ResponseEntity.ok(millenniumFalconService.computeBestOddsToReachDestination(empireInformationDto));
     }
 }

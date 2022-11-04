@@ -1,18 +1,14 @@
 package com.starwars.millenniumfalcononboardcomputer.service;
 
-import com.starwars.millenniumfalcononboardcomputer.configuration.MillenniumFalconConfiguration;
 import com.starwars.millenniumfalcononboardcomputer.model.dto.BountyHunterDto;
 import com.starwars.millenniumfalcononboardcomputer.model.dto.EmpireInformationDto;
 import com.starwars.millenniumfalcononboardcomputer.model.entity.Route;
 import com.starwars.millenniumfalcononboardcomputer.repository.RouteRepository;
 import lombok.val;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,8 +25,6 @@ class MillenniumFalconServiceTest {
     private MillenniumFalconService millenniumFalconService;
     @Mock
     private RouteRepository routeRepository;
-    @InjectMocks
-    private MillenniumFalconConfiguration millenniumFalconConfiguration;
 
     @BeforeEach
     void setUp() {

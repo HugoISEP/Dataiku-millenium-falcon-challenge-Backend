@@ -5,6 +5,7 @@ import lombok.experimental.Accessors;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 @Table(name = "ROUTES")
@@ -14,9 +15,11 @@ import javax.validation.constraints.Min;
 public class Route {
     @Id
     @Column(nullable = false)
+    @NotBlank
     private String origin;
     @Id
     @Column(nullable = false)
+    @NotBlank
     private String destination;
     @Column(nullable = false)
     @Min(value = 1)
