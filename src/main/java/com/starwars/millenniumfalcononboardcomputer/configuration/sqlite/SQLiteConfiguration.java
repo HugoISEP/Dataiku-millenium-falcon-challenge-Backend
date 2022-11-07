@@ -25,9 +25,12 @@ public class SQLiteConfiguration {
     public DataSource dataSource() {
         val dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName(driverClassName);
-        val relativePath = String.format("%s/%s", PATH_TO_RESOURCES_FOLDER, millenniumFalconConfiguration.getRoutesDb());
 
-        if (Files.exists(Path.of(relativePath))) {
+        val absolutePath = millenniumFalconConfiguration.getRoutesDb();
+        val relativePath = String.format("%s/%s", PATH_TO_RESOURCES_FOLDER, millenniumFalconConfiguration.getRoutesDb());
+        if (Files.exists(Path.of(absolutePath))) {
+            dataSource.setUrl(String.format("jdbc:sqlite:%s", absolutePath));
+        } else if (Files.exists(Path.of(relativePath))) {
             dataSource.setUrl(String.format("jdbc:sqlite:%s", relativePath));
         } else {
             throw new ExceptionInInitializerError("File for db routes not found");
