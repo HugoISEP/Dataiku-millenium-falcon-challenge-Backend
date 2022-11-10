@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
+import java.util.Objects;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -23,7 +25,9 @@ class SQLiteConfigurationTest {
         // Given a db file with a path either absolute or relative to the location of the millennium-falcon.json
         // When the application context is loaded
         // Then the database should be configured
-        assertEquals("jdbc:sqlite:src/main/resources/universe.db", driverManagerDataSource.getUrl());
+        val pathToFile = Objects.requireNonNull(this.getClass().getClassLoader().getResource("universe.db")).getPath().replace("%20", " ");
+        val databaseUrl = String.format("jdbc:sqlite:%s", pathToFile);
+        assertEquals(databaseUrl, driverManagerDataSource.getUrl());
     }
 
     @Test

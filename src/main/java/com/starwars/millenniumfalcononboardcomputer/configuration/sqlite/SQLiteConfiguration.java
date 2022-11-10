@@ -11,6 +11,7 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import javax.sql.DataSource;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Objects;
 
 @Configuration
 @RequiredArgsConstructor
@@ -19,7 +20,6 @@ public class SQLiteConfiguration {
 
     @Value("${spring.datasource.driver-class-name}")
     private String driverClassName;
-    private final String PATH_TO_RESOURCES_FOLDER = "src/main/resources";
 
     @Bean
     public DataSource dataSource() {
@@ -27,7 +27,9 @@ public class SQLiteConfiguration {
         dataSource.setDriverClassName(driverClassName);
 
         val absolutePath = millenniumFalconConfiguration.getRoutesDb();
-        val relativePath = String.format("%s/%s", PATH_TO_RESOURCES_FOLDER, millenniumFalconConfiguration.getRoutesDb());
+        val relativePath = Objects.requireNonNull(this.getClass().getClassLoader()
+                        .getResource(millenniumFalconConfiguration.getRoutesDb()))
+                .getPath().replace("%20", " ");
         if (Files.exists(Path.of(absolutePath))) {
             dataSource.setUrl(String.format("jdbc:sqlite:%s", absolutePath));
         } else if (Files.exists(Path.of(relativePath))) {
