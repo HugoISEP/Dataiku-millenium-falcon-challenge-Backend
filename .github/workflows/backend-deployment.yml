@@ -37,8 +37,17 @@ jobs:
           SSH_HOST: ${{ secrets.SSH_HOST }}
       - name: Upload artifact
         run: |
-          scp target/classes/universe.db target/classes/millennium-falcon.json raspberry:~/dataiku/backend
+          scp target/classes/millennium-falcon.json raspberry:~/dataiku/backend
           scp target/*.jar raspberry:~/dataiku/backend/app.jar
+      - name: Upload routes database file
+        run: |
+          DEFAULT_RESSOURCES_PATH=target/classes
+          ROUTES_DB_PATH=$(jq -r .routes_db $DEFAULT_RESSOURCES_PATH/millennium-falcon.json)
+          if [ -f "$DEFAULT_RESSOURCES_PATH/$ROUTES_DB_PATH" ]; then
+              scp $DEFAULT_RESSOURCES_PATH/$ROUTES_DB_PATH raspberry:~/dataiku/backend/$ROUTES_DB_PATH
+          else
+              scp $ROUTES_DB_PATH raspberry:~/dataiku/backend/$ROUTES_DB_PATH
+          fi
       - name: Relaunch Docker containers
         run: ssh raspberry 'docker-compose -f ~/dataiku/docker-compose.yml up --build -d'
       - name: Clean up
