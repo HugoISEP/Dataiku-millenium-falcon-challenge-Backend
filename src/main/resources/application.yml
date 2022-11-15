@@ -6,6 +6,13 @@ spring:
     hibernate.ddl-auto: update
   cors:
     allowed-origins: "*"
+logging:
+  level:
+    org:
+      springframework:
+        web:
+          filter:
+            CommonsRequestLoggingFilter: DEBUG
 
 ---
 spring:
