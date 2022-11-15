@@ -40,5 +40,5 @@ mvn test
 [Github Actions](https://github.com/features/actions) tool is used to process the continuous integration and continuous delivery.  
 It consists of three steps:
 1. Build the application
-2. Rune tests
+2. Run tests
 3. Deploy the application
